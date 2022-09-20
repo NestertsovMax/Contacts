@@ -13,7 +13,7 @@ class ContactsViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet var contactSearch: UISearchBar!
     
-    
+    var delegate: ContactsDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,12 +32,14 @@ class ContactsViewController: UIViewController {
             guard let destVC = segue.destination as? NewContactViewController else { return }
             guard let tableCell = sender as? UITableViewCell else { return }
             guard let indexPath = tableView.indexPath(for: tableCell) else { return }
+            destVC.delegate = self
             destVC.contacts = DataManager.instance.contacts[indexPath.row]
             destVC.source = .add
         } else if identifier == "ShowEditViewController" {
             guard let destVC = segue.destination as? NewContactViewController else { return }
             guard let tableCell = sender as? UITableViewCell else { return }
             guard let indexPath = tableView.indexPath(for: tableCell) else { return }
+            destVC.delegate = self
             destVC.contacts = DataManager.instance.contacts[indexPath.section]
             destVC.source = .edit
         }
@@ -58,7 +60,7 @@ extension ContactsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ContactsTableViewCell", for: indexPath) as? ContactsTableViewCell else { return UITableViewCell() }
         let contact = DataManager.instance.contacts[indexPath.row]
-        cell.update(contact: contact.surname)
+        cell.update(contact: contact.fullName)
         return cell
     }
     
@@ -74,15 +76,15 @@ extension ContactsViewController: UITableViewDataSource {
     }
 }
 
-extension ContactsViewController: ContactsDelegate {
-    func didResetInfo() {
-        tableView.reloadData()
-    }
-}
-
 extension ContactsViewController {
     enum Source {
         case add
         case edit
+    }
+}
+
+extension ContactsViewController: ContactsDelegate {
+    func didResetInfo() {
+        tableView.reloadData()
     }
 }

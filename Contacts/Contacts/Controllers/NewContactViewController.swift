@@ -18,7 +18,6 @@ class NewContactViewController: UIViewController {
     
     var contacts: Contact?
     var source: Source = .add
-    var currentImage: UIImage?
     var imagePicker = UIImagePickerController()
     var delegate: ContactsDelegate?
     
@@ -63,7 +62,7 @@ class NewContactViewController: UIViewController {
     }
     
     @IBAction func addEditContactButton(_ sender: UIBarButtonItem) {
-        let alert = UIAlertController(title: "Ошибка!", message: "Заполните все поля", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля Имя и Фамилия", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         guard let name = name.text, !name.isEmpty else { return self.present(alert, animated: true) }
         guard let surname = surname.text, !surname.isEmpty else { return self.present(alert, animated: true) }
@@ -75,9 +74,11 @@ class NewContactViewController: UIViewController {
             let newContact = Contact(name: name, surname: surname, email: email, phoneNumber: phoneNumber, image: imageContact)
             DataManager.instance.addContact(newContact)
         case .edit:
-            let editContact = Contact(name: name, surname: surname, email: email, phoneNumber: phoneNumber, image: imageContact)
+            var editContact = Contact(name: name, surname: surname, email: email, phoneNumber: phoneNumber, image: imageContact)
+            editContact.id = contacts!.id
             DataManager.instance.editContact(editContact)
         }
+        delegate?.didResetInfo()
         navigationController?.popToRootViewController(animated: true)
     }
 }

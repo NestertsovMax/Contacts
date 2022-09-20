@@ -16,7 +16,6 @@ final class DataManager {
     
     func addContact(_ contact: Contact) {
         contacts.insert(contact, at: 0)
-        sortedContact()
     }
     
     func deleteContact(_ index: Int) {
@@ -27,10 +26,9 @@ final class DataManager {
         guard let editingContactIndex = contacts.firstIndex(where: { $0.id == contact.id } ) else { return }
         contacts.remove(at: editingContactIndex)
         contacts.append(contact)
-        sortedContact()
+        contacts = contacts.sorted(by: { $0.surname < $1.surname })
+        
+        print(contacts)
     }
     
-    func sortedContact() {
-        contacts.sorted(by: { $0.surname < $1.surname })
-    }
 }
