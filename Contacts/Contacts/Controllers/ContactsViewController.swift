@@ -33,14 +33,18 @@ class ContactsViewController: UIViewController {
             guard let tableCell = sender as? UITableViewCell else { return }
             guard let indexPath = tableView.indexPath(for: tableCell) else { return }
             destVC.delegate = self
-            destVC.contacts = DataManager.instance.contacts[indexPath.row]
+            let key = Array(DataManager.instance.dataSource.keys)[indexPath.section]
+            guard let contact = DataManager.instance.dataSource[key]?[indexPath.row] else { return }
+            destVC.contacts = contact
             destVC.source = .add
         } else if identifier == "ShowEditViewController" {
             guard let destVC = segue.destination as? NewContactViewController else { return }
             guard let tableCell = sender as? UITableViewCell else { return }
             guard let indexPath = tableView.indexPath(for: tableCell) else { return }
             destVC.delegate = self
-            destVC.contacts = DataManager.instance.contacts[indexPath.section]
+            let key = Array(DataManager.instance.dataSource.keys)[indexPath.section]
+            guard let contact = DataManager.instance.dataSource[key]?[indexPath.row] else { return }
+            destVC.contacts = contact
             destVC.source = .edit
         }
     }
@@ -54,25 +58,42 @@ extension ContactsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        DataManager.instance.dataSource.keys.
+    }
 }
 
 extension ContactsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ContactsTableViewCell", for: indexPath) as? ContactsTableViewCell else { return UITableViewCell() }
-        let contact = DataManager.instance.contacts[indexPath.row]
+        let key = Array(DataManager.instance.dataSource.keys)[indexPath.section]
+        
+        guard let contact = DataManager.instance.dataSource[key]?[indexPath.row] else { return UITableViewCell() }
         cell.update(contact: contact.fullName)
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        DataManager.instance.contacts.count
+        let key = Array(DataManager.instance.dataSource.keys)[section]
+        return DataManager.instance.dataSource[key]?.count ?? .zero
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            DataManager.instance.deleteContact(indexPath.row)
+            let key = Array(DataManager.instance.dataSource.keys)[indexPath.section]
+            guard let contact = DataManager.instance.dataSource[key]?[indexPath.row] else { return }
+            DataManager.instance.delete(contact)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
+    }
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let firstLetterSurnameContact = Array(DataManager.instance.dataSource.keys)[section]
+        return firstLetterSurnameContact
     }
 }
 

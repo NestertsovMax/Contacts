@@ -74,8 +74,8 @@ class NewContactViewController: UIViewController {
             let newContact = Contact(name: name, surname: surname, email: email, phoneNumber: phoneNumber, image: imageContact)
             DataManager.instance.addContact(newContact)
         case .edit:
-            var editContact = Contact(name: name, surname: surname, email: email, phoneNumber: phoneNumber, image: imageContact)
-            editContact.id = contacts!.id
+            guard let id = contacts?.id else { return }
+            let editContact = Contact(name: name, surname: surname, email: email, phoneNumber: phoneNumber, image: imageContact, id: id)
             DataManager.instance.editContact(editContact)
         }
         delegate?.didResetInfo()
