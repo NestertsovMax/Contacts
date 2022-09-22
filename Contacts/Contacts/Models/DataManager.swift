@@ -15,7 +15,9 @@ final class DataManager {
         generateMock()
     }
     
-    private(set) var dataSource: [String: [Contact]] = [:]
+    private (set) var dataSource: [String: [Contact]] = [:]
+    private (set) var lettersArray: [String] = []
+    var allContacts: [Contact] = []
     
     private func generateMock() {
         let firstContact  = Contact(name: "Max", surname: "Nestertov", email: "max@gmail.com", phoneNumber: "0222222", image: UIImage(named: "1")!)
@@ -25,7 +27,12 @@ final class DataManager {
         let fifthContact  = Contact(name: "Egor", surname: "Kolbasov", email: "max@gmail.com", phoneNumber: "0222222", image: UIImage(named: "5")!)
         let mock = [firstContact, secodContact, thirdContact, fouthContact, fifthContact]
         
-        for item in mock {
+        allContacts.append(contentsOf: mock)
+        compileDataBase()
+    }
+    
+    private func compileDataBase() {
+        for item in allContacts {
             if var currentValue = dataSource[item.surnameFirstLetter] {
                 currentValue.append(item)
                 dataSource.updateValue(currentValue, forKey: item.surnameFirstLetter)
@@ -38,40 +45,54 @@ final class DataManager {
             let sortedValue = element.sorted(by: { $0.name < $1.name })
             dataSource[key] = sortedValue
         }
+        updateLettersArray()
+    }
+    
+    private func updateLettersArray() {
+        lettersArray = Array(dataSource.keys)
+        lettersArray.sort()
+    }
+    
+    func getContact(indexPath: IndexPath) -> Contact? {
+        let contactKey = lettersArray[indexPath.section]
+        let contactsForSection = dataSource[contactKey]
+        return contactsForSection?[indexPath.row]
     }
 
-    
     func addContact(_ contact: Contact) {
-        if var currentValue = dataSource[contact.surnameFirstLetter] {
-            currentValue.append(contact)
-            dataSource.updateValue(currentValue, forKey: contact.surnameFirstLetter)
-        } else {
-            dataSource.updateValue([contact], forKey: contact.surnameFirstLetter)
-        }
+        allContacts.append(contact)
+        resetDataSource()
+        updateLettersArray()
+        NotificationCenter.default.post(name: .ContactAdded, object: nil)
+    }
+    
+    func resetDataSource() {
+        dataSource = [:]
+        compileDataBase()
     }
     
      func delete(_ contact: Contact) {
-         guard var contacts = dataSource[contact.surnameFirstLetter],
-         let index = contacts.firstIndex(where: {
-             $0.id == contact.id
-         })
-         else { return }
-         contacts.remove(at: index)
-         if contacts.isEmpty {
-             dataSource[contact.surnameFirstLetter] = nil
-         } else {
-             dataSource.updateValue(contacts, forKey: contact.surnameFirstLetter)
+         guard let deletingIndex = getIndex(of: contact, in: allContacts) else { return }
+         allContacts.remove(at: deletingIndex)
+         resetDataSource()
+         updateLettersArray()
+         NotificationCenter.default.post(name: .ContactDeleted, object: nil)
          }
-    }
     
     func editContact(_ contact: Contact) {
-        guard var contacts = dataSource[contact.surnameFirstLetter],
-        let index = contacts.firstIndex(where: {
-            $0.id == contact.id
-        })
-        else { return }
-        contacts.remove(at: index)
-        dataSource.updateValue(contacts, forKey: contact.surnameFirstLetter)
-        addContact(contact)
+        guard let editingIndex = getIndex(of: contact, in: allContacts) else { fatalError("Contact index is lost") }
+        allContacts[editingIndex] = contact
+        resetDataSource()
+        updateLettersArray()
+        NotificationCenter.default.post(name: .ContactChanged, object: nil)
+    }
+    
+    private func getIndex(of contact: Contact, in contactsArray: [Contact]) -> Int? {
+        var contactIndex: Int?
+        for (index, item) in contactsArray.enumerated() where item.id == contact.id {
+            contactIndex = index
+            break
+        }
+        return contactIndex
     }
 }

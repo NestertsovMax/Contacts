@@ -19,7 +19,6 @@ class NewContactViewController: UIViewController {
     var contacts: Contact?
     var source: Source = .add
     var imagePicker = UIImagePickerController()
-    var delegate: ContactsDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +27,7 @@ class NewContactViewController: UIViewController {
         circleImageChanger()
         switch source {
         case .add:
+            imageContact.image = UIImage(named: "user")
             addEditContactButton.title = "Добавить"
             title = "Создать"
         case .edit:
@@ -66,8 +66,8 @@ class NewContactViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         guard let name = name.text, !name.isEmpty else { return self.present(alert, animated: true) }
         guard let surname = surname.text, !surname.isEmpty else { return self.present(alert, animated: true) }
-        guard let email = email.text else { return }
-        guard let phoneNumber = phoneNumber.text else { return }
+        let email = email.text ?? ""
+        let phoneNumber = phoneNumber.text ?? ""
         guard let imageContact = imageContact.image else { return }
         switch source {
         case .add:
@@ -78,7 +78,7 @@ class NewContactViewController: UIViewController {
             let editContact = Contact(name: name, surname: surname, email: email, phoneNumber: phoneNumber, image: imageContact, id: id)
             DataManager.instance.editContact(editContact)
         }
-        delegate?.didResetInfo()
+        
         navigationController?.popToRootViewController(animated: true)
     }
 }
