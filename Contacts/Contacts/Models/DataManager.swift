@@ -31,7 +31,7 @@ final class DataManager {
         compileDataBase()
     }
     
-    private func compileDataBase() {
+    func compileDataBase() {
         for item in allContacts {
             if var currentValue = dataSource[item.surnameFirstLetter] {
                 currentValue.append(item)
@@ -48,7 +48,7 @@ final class DataManager {
         updateLettersArray()
     }
     
-    private func updateLettersArray() {
+    func updateLettersArray() {
         lettersArray = Array(dataSource.keys)
         lettersArray.sort()
     }
@@ -87,7 +87,7 @@ final class DataManager {
         NotificationCenter.default.post(name: .ContactChanged, object: nil)
     }
     
-    private func getIndex(of contact: Contact, in contactsArray: [Contact]) -> Int? {
+    func getIndex(of contact: Contact, in contactsArray: [Contact]) -> Int? {
         var contactIndex: Int?
         for (index, item) in contactsArray.enumerated() where item.id == contact.id {
             contactIndex = index
