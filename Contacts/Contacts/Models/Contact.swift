@@ -19,6 +19,11 @@ struct Contact: Equatable {
         surname + " " + name
     }
     
+    var surnameFirstLetter: String {
+        guard let first = surname.first else { return "" }
+        return String(first)
+    }
+    
     static func == (left: Contact, right: Contact) -> Bool {
         return true
     }
