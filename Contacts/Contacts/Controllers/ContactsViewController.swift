@@ -52,6 +52,8 @@ class ContactsViewController: UIViewController {
         }
     }
     
+    
+    
     private func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(contactDeleted), name: .ContactDeleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(contactDetailsChanged), name: .ContactChanged, object: nil)
