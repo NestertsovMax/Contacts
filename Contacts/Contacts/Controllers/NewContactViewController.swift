@@ -9,12 +9,12 @@ import UIKit
 
 class NewContactViewController: UIViewController {
 
-    @IBOutlet var imageContact: UIImageView!
-    @IBOutlet var name: UITextField!
-    @IBOutlet var surname: UITextField!
-    @IBOutlet var email: UITextField!
-    @IBOutlet var phoneNumber: UITextField!
-    @IBOutlet var addEditContactButton: UIBarButtonItem!
+    @IBOutlet private var imageContact: UIImageView!
+    @IBOutlet private var name: UITextField!
+    @IBOutlet private var surname: UITextField!
+    @IBOutlet private var email: UITextField!
+    @IBOutlet private var phoneNumber: UITextField!
+    @IBOutlet private var addEditContactButton: UIBarButtonItem!
     
     var contacts: Contact?
     var source: Source = .add
@@ -37,14 +37,14 @@ class NewContactViewController: UIViewController {
         self.hideKeyboardWhenTappedAround()
     }
     
-    func circleImageChanger() {
+    private func circleImageChanger() {
         imageContact?.layer.cornerRadius = (imageContact?.frame.size.width ?? 0.0) / 2
         imageContact?.clipsToBounds = true
         imageContact?.layer.borderWidth = 3.0
         imageContact?.layer.borderColor = UIColor.white.cgColor
     }
     
-    func editContactData() {
+   func editContactData() {
         imageContact.image = contacts?.image
         name.text = contacts?.name
         surname.text = contacts?.surname
@@ -83,10 +83,8 @@ class NewContactViewController: UIViewController {
         alertEmail.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         guard let name = name.text, !name.isEmpty else { return self.present(alert, animated: true) }
         guard let surname = surname.text, !surname.isEmpty else { return self.present(alert, animated: true) }
-        var email = email.text ?? ""
-        if !email.isEmpty, !email.contains("@") {
-            self.present(alertEmail, animated: true)
-        } else { email = "" }
+        let email = email.text ?? ""
+        if !email.isEmpty, !email.contains("@") { self.present(alertEmail, animated: true) }
         let phoneNumber = phoneNumber.text ?? ""
         guard let imageContact = imageContact.image else { return }
         switch source {
