@@ -10,8 +10,8 @@ import UIKit
 class ContactsViewController: UIViewController {
     
     
-    @IBOutlet var tableView: UITableView!
-    @IBOutlet var contactSearch: UISearchBar!
+    @IBOutlet private var tableView: UITableView!
+    @IBOutlet private var contactSearch: UISearchBar!
     
     private var isSearchActive: Bool = false
     private var filteredContacts = [Contact]()
@@ -52,28 +52,26 @@ class ContactsViewController: UIViewController {
         }
     }
     
-    
-    
     private func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(contactDeleted), name: .ContactDeleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(contactDetailsChanged), name: .ContactChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(contactAdded), name: .ContactAdded, object: nil)
     }
     
-        @objc func contactDetailsChanged() {
-            DataManager.instance.resetDataSource()
-            updateSearchArrayIfNeeded()
-            tableView.reloadData()
-        }
+    @objc func contactDetailsChanged() {
+        DataManager.instance.resetDataSource()
+        updateSearchArrayIfNeeded()
+        tableView.reloadData()
+    }
         
-        @objc func contactAdded() {
-            tableView.reloadData()
-        }
+    @objc func contactAdded() {
+        tableView.reloadData()
+    }
         
-        @objc func contactDeleted() {
-            updateSearchArrayIfNeeded()
-            tableView.reloadData()
-        }
+    @objc func contactDeleted() {
+        updateSearchArrayIfNeeded()
+        tableView.reloadData()
+    }
     
     private func updateSearchArrayIfNeeded() {
         guard isSearchActive else { return }
@@ -154,8 +152,6 @@ extension ContactsViewController {
         case edit
     }
 }
-
-
 
 extension ContactsViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
