@@ -34,17 +34,14 @@ class NewContactViewController: UIViewController {
             addEditContactButton.title = "Записать"
             title = "Редактировать"
         }
-        
-        
+        self.hideKeyboardWhenTappedAround()
     }
     
     func circleImageChanger() {
-        imagePicker.delegate = self
-        imageContact.layer.borderWidth = 1
-        imageContact.layer.masksToBounds = false
-        imageContact.layer.borderColor = UIColor.black.cgColor
-        imageContact.layer.cornerRadius = imageContact.frame.height/2
-        imageContact.clipsToBounds = true
+        imageContact?.layer.cornerRadius = (imageContact?.frame.size.width ?? 0.0) / 2
+        imageContact?.clipsToBounds = true
+        imageContact?.layer.borderWidth = 3.0
+        imageContact?.layer.borderColor = UIColor.white.cgColor
     }
     
     func editContactData() {
@@ -56,9 +53,27 @@ class NewContactViewController: UIViewController {
     }
     
     @IBAction func addPhoto(_ sender: Any) {
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.allowsEditing = true
-        present(imagePicker, animated: true, completion: nil)
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        let actionSheet = UIAlertController(title: "Photo Source", message: "Choose a source", preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (_: UIAlertAction) in
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                imagePickerController.sourceType = .camera
+                self.present(imagePickerController, animated: true, completion: nil)
+            } else {
+                let errorAlert = UIAlertController(title: "Error", message: "Camare is not available", preferredStyle: .actionSheet)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                errorAlert.addAction(okAction)
+                self.present(errorAlert, animated: true, completion: nil)
+            }
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (_: UIAlertAction) in
+            imagePickerController.sourceType = .photoLibrary
+            self.present(imagePickerController, animated: true, completion: nil)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(actionSheet, animated: true, completion: nil)
     }
     
     @IBAction func addEditContactButton(_ sender: UIBarButtonItem) {
@@ -68,10 +83,10 @@ class NewContactViewController: UIViewController {
         alertEmail.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         guard let name = name.text, !name.isEmpty else { return self.present(alert, animated: true) }
         guard let surname = surname.text, !surname.isEmpty else { return self.present(alert, animated: true) }
-        let email = email.text ?? ""
+        var email = email.text ?? ""
         if !email.isEmpty, !email.contains("@") {
             self.present(alertEmail, animated: true)
-        } else { return }
+        } else { email = "" }
         let phoneNumber = phoneNumber.text ?? ""
         guard let imageContact = imageContact.image else { return }
         switch source {
@@ -86,11 +101,6 @@ class NewContactViewController: UIViewController {
         
         navigationController?.popToRootViewController(animated: true)
     }
-    
-    func validateEmail(candidate: String) -> Bool {
-        let emailRegex = email.text
-        return NSPredicate(format: "SELF MATCHES %@", emailRegex!).evaluate(with: candidate)
-    }
 }
 
 extension NewContactViewController {
@@ -102,11 +112,16 @@ extension NewContactViewController {
 
 extension NewContactViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+        
+        if let image = info [UIImagePickerController.InfoKey.editedImage] as? UIImage {
             imageContact.image = image
         }
         
-        dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -114,3 +129,14 @@ protocol ContactsDelegate: AnyObject {
     func didResetInfo()
 }
 
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
