@@ -43,7 +43,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="personName" destination="f1x-6Y-Q6y" id="w4U-yL-8wA"/>
-                                            <segue destination="Hex-rb-RUY" kind="show" identifier="ShowEditViewController" id="8hU-ud-6XF"/>
+                                            <segue destination="Hex-rb-RUY" kind="show" identifier="ShowNewContactViewController" id="dI3-6y-cAk"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -62,7 +62,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="gis-to-Aye">
                             <connections>
                                 <action selector="addNewContact:" destination="BYZ-38-t0r" id="cqg-ir-BcZ"/>
-                                <segue destination="Hex-rb-RUY" kind="show" identifier="ShowNewContactViewController" id="qeK-sa-z1K"/>
+                                <segue destination="Hex-rb-RUY" kind="show" identifier="addContact" id="qeK-sa-z1K"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -83,26 +83,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Noc-4k-07i">
-                                <rect key="frame" x="147" y="77" width="120" height="156"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pd9-Ih-hr0">
-                                        <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="120" id="3UJ-Rg-V6l"/>
-                                            <constraint firstAttribute="width" constant="120" id="dOI-DT-DuW"/>
-                                        </constraints>
-                                    </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yGd-6e-KqJ">
-                                        <rect key="frame" x="0.0" y="125" width="120" height="31"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Add photo"/>
-                                        <connections>
-                                            <action selector="addPhoto:" destination="Hex-rb-RUY" eventType="touchUpInside" id="PmR-Zn-i75"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
                             <stackView opaque="NO" contentMode="scaleAspectFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="TwT-dd-aK2">
                                 <rect key="frame" x="10" y="238" width="394" height="310"/>
                                 <subviews>
@@ -140,7 +120,7 @@
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3Ez-tU-4VM">
                                         <rect key="frame" x="0.0" y="200" width="394" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" spellCheckingType="yes" keyboardType="emailAddress" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes" textContentType="email"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="yes" spellCheckingType="yes" keyboardType="emailAddress" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes" textContentType="email"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Телефон:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fJW-Qm-XWZ">
                                         <rect key="frame" x="0.0" y="240" width="394" height="30"/>
@@ -155,6 +135,26 @@
                                     </textField>
                                 </subviews>
                             </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Noc-4k-07i">
+                                <rect key="frame" x="147" y="93" width="120" height="140"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pd9-Ih-hr0">
+                                        <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="120" id="3UJ-Rg-V6l"/>
+                                            <constraint firstAttribute="width" constant="120" id="dOI-DT-DuW"/>
+                                        </constraints>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yGd-6e-KqJ">
+                                        <rect key="frame" x="0.0" y="125" width="120" height="15"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Add photo"/>
+                                        <connections>
+                                            <action selector="addPhoto:" destination="Hex-rb-RUY" eventType="touchUpInside" id="PmR-Zn-i75"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="j7X-hj-RJh"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -163,7 +163,7 @@
                             <constraint firstItem="Noc-4k-07i" firstAttribute="centerX" secondItem="Hna-yl-HKI" secondAttribute="centerX" id="Cdj-EV-l7w"/>
                             <constraint firstItem="TwT-dd-aK2" firstAttribute="top" secondItem="j7X-hj-RJh" secondAttribute="top" constant="150" id="IpM-lR-b1p"/>
                             <constraint firstItem="TwT-dd-aK2" firstAttribute="leading" secondItem="j7X-hj-RJh" secondAttribute="leading" constant="10" id="MXR-Q3-tVx"/>
-                            <constraint firstItem="Noc-4k-07i" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Hna-yl-HKI" secondAttribute="top" constant="60" id="rRD-0z-0v5"/>
+                            <constraint firstItem="Noc-4k-07i" firstAttribute="top" secondItem="j7X-hj-RJh" secondAttribute="top" constant="5" id="PMT-Ap-NDr"/>
                             <constraint firstItem="j7X-hj-RJh" firstAttribute="trailing" secondItem="TwT-dd-aK2" secondAttribute="trailing" constant="10" id="x6b-Pt-UcN"/>
                             <constraint firstItem="TwT-dd-aK2" firstAttribute="top" secondItem="Noc-4k-07i" secondAttribute="bottom" constant="5" id="z5I-dn-LlT"/>
                         </constraints>
@@ -208,7 +208,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="8hU-ud-6XF"/>
+        <segue reference="dI3-6y-cAk"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="plus" catalog="system" width="128" height="113"/>

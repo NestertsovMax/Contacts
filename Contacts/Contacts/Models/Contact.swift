@@ -14,7 +14,15 @@ struct Contact: Equatable {
     let email: String
     let phoneNumber: String
     let image: UIImage
-    let id: UUID = UUID()
+    var id: UUID = UUID()
+    var fullName: String {
+        surname + " " + name
+    }
+    
+    var surnameFirstLetter: String {
+        guard let first = surname.first else { return "" }
+        return String(first)
+    }
     
     static func == (left: Contact, right: Contact) -> Bool {
         return true

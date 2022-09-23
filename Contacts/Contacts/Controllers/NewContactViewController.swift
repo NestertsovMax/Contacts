@@ -18,9 +18,7 @@ class NewContactViewController: UIViewController {
     
     var contacts: Contact?
     var source: Source = .add
-    var currentImage: UIImage?
     var imagePicker = UIImagePickerController()
-    var delegate: ContactsDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +27,7 @@ class NewContactViewController: UIViewController {
         circleImageChanger()
         switch source {
         case .add:
+            imageContact.image = UIImage(named: "user")
             addEditContactButton.title = "Добавить"
             title = "Создать"
         case .edit:
@@ -63,22 +62,34 @@ class NewContactViewController: UIViewController {
     }
     
     @IBAction func addEditContactButton(_ sender: UIBarButtonItem) {
-        let alert = UIAlertController(title: "Ошибка!", message: "Заполните все поля", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля Имя и Фамилия", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        let alertEmail = UIAlertController(title: "Не соответствует почта!", message: "Введите коректно почту!", preferredStyle: .alert)
+        alertEmail.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         guard let name = name.text, !name.isEmpty else { return self.present(alert, animated: true) }
         guard let surname = surname.text, !surname.isEmpty else { return self.present(alert, animated: true) }
-        guard let email = email.text else { return }
-        guard let phoneNumber = phoneNumber.text else { return }
+        let email = email.text ?? ""
+        if !email.isEmpty, !email.contains("@") {
+            self.present(alertEmail, animated: true)
+        } else { return }
+        let phoneNumber = phoneNumber.text ?? ""
         guard let imageContact = imageContact.image else { return }
         switch source {
         case .add:
             let newContact = Contact(name: name, surname: surname, email: email, phoneNumber: phoneNumber, image: imageContact)
             DataManager.instance.addContact(newContact)
         case .edit:
-            let editContact = Contact(name: name, surname: surname, email: email, phoneNumber: phoneNumber, image: imageContact)
+            guard let id = contacts?.id else { return }
+            let editContact = Contact(name: name, surname: surname, email: email, phoneNumber: phoneNumber, image: imageContact, id: id)
             DataManager.instance.editContact(editContact)
         }
+        
         navigationController?.popToRootViewController(animated: true)
+    }
+    
+    func validateEmail(candidate: String) -> Bool {
+        let emailRegex = email.text
+        return NSPredicate(format: "SELF MATCHES %@", emailRegex!).evaluate(with: candidate)
     }
 }
 
@@ -102,3 +113,4 @@ extension NewContactViewController: UIImagePickerControllerDelegate, UINavigatio
 protocol ContactsDelegate: AnyObject {
     func didResetInfo()
 }
+

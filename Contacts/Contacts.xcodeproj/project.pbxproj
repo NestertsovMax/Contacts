@@ -17,6 +17,7 @@
 		6FA4A9FD28D5FB8B0082F37A /* ContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4A9FC28D5FB8B0082F37A /* ContactsTableViewCell.swift */; };
 		6FA4A9FF28D5FC7F0082F37A /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4A9FE28D5FC7F0082F37A /* Contact.swift */; };
 		6FA4AA0128D706100082F37A /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4AA0028D706100082F37A /* DataManager.swift */; };
+		6FA4AA0628DCE7E20082F37A /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4AA0528DCE7E20082F37A /* Notification.swift */; };
 		CE49F35F9D5924CAA5F5FF0C /* Pods_Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C0EE3DB48B6A39216B2FFA6 /* Pods_Contacts.framework */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,7 @@
 		6FA4A9FC28D5FB8B0082F37A /* ContactsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTableViewCell.swift; sourceTree = "<group>"; };
 		6FA4A9FE28D5FC7F0082F37A /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		6FA4AA0028D706100082F37A /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		6FA4AA0528DCE7E20082F37A /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		7C0245F6235621D36287A691 /* Pods-Contacts.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Contacts.release.xcconfig"; path = "Target Support Files/Pods-Contacts/Pods-Contacts.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,6 +76,7 @@
 				6FA4A9F728D5ED850082F37A /* Controllers */,
 				6FA4A9F628D5ED7B0082F37A /* Views */,
 				6FA4A9F528D5ED6F0082F37A /* Models */,
+				6FA4AA0428DCE7A40082F37A /* Extensions */,
 				6FA4A9F928D5ED990082F37A /* Supporting files */,
 			);
 			path = Contacts;
@@ -116,6 +119,14 @@
 				6F09151928D4D61F00B49774 /* Info.plist */,
 			);
 			name = "Supporting files";
+			sourceTree = "<group>";
+		};
+		6FA4AA0428DCE7A40082F37A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6FA4AA0528DCE7E20082F37A /* Notification.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		D93AFFF3A42029FC25395ED2 /* Pods */ = {
@@ -236,6 +247,7 @@
 				6FA4A9F428D5EB870082F37A /* ContactsViewController.swift in Sources */,
 				6F09150928D4D61E00B49774 /* AppDelegate.swift in Sources */,
 				6FA4AA0128D706100082F37A /* DataManager.swift in Sources */,
+				6FA4AA0628DCE7E20082F37A /* Notification.swift in Sources */,
 				6FA4A9FD28D5FB8B0082F37A /* ContactsTableViewCell.swift in Sources */,
 				6FA4A9FB28D5EED40082F37A /* NewContactViewController.swift in Sources */,
 				6F09150B28D4D61E00B49774 /* SceneDelegate.swift in Sources */,
