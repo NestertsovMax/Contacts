@@ -141,8 +141,8 @@
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pd9-Ih-hr0">
                                         <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="120" id="3UJ-Rg-V6l"/>
-                                            <constraint firstAttribute="width" constant="120" id="dOI-DT-DuW"/>
+                                            <constraint firstAttribute="height" constant="120" id="JbX-sW-OHU"/>
+                                            <constraint firstAttribute="width" constant="120" id="Puh-s0-vYg"/>
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yGd-6e-KqJ">
