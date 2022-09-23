@@ -64,9 +64,14 @@ class NewContactViewController: UIViewController {
     @IBAction func addEditContactButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля Имя и Фамилия", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        let alertEmail = UIAlertController(title: "Не соответствует почта!", message: "Введите коректно почту!", preferredStyle: .alert)
+        alertEmail.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         guard let name = name.text, !name.isEmpty else { return self.present(alert, animated: true) }
         guard let surname = surname.text, !surname.isEmpty else { return self.present(alert, animated: true) }
         let email = email.text ?? ""
+        if !email.isEmpty, !email.contains("@") {
+            self.present(alertEmail, animated: true)
+        } else { return }
         let phoneNumber = phoneNumber.text ?? ""
         guard let imageContact = imageContact.image else { return }
         switch source {
@@ -80,6 +85,11 @@ class NewContactViewController: UIViewController {
         }
         
         navigationController?.popToRootViewController(animated: true)
+    }
+    
+    func validateEmail(candidate: String) -> Bool {
+        let emailRegex = email.text
+        return NSPredicate(format: "SELF MATCHES %@", emailRegex!).evaluate(with: candidate)
     }
 }
 
@@ -103,3 +113,4 @@ extension NewContactViewController: UIImagePickerControllerDelegate, UINavigatio
 protocol ContactsDelegate: AnyObject {
     func didResetInfo()
 }
+
